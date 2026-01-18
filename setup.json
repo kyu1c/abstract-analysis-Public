@@ -1,0 +1,14 @@
+{
+    "api_keys": {
+        "google_generative_ai_api_key": ""
+    },
+    "firebase": {
+        "apiKey": "",
+        "authDomain": "",
+        "projectId": "",
+        "storageBucket": "",
+        "messagingSenderId": "",
+        "appId": "",
+        "measurementId": ""
+    }
+}

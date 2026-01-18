@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'unikyu20@unist.ac.kr';
+    }
+
+    // Helper function to check if user is owner
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Admin can do anything
+      // Owner can read/write their own data
+      allow read, write: if isAdmin() || isOwner(userId);
+    }
+
+    // Papers collection
+    match /papers/{paperId} {
+      // Admin can do anything
+      // Users can read/write papers where user_id matches their uid
+      allow read, write: if isAdmin() || (request.auth != null && resource.data.user_id == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+    }
+
+    // Annotations collection (assuming it exists or will exist)
+    match /annotations/{annotationId} {
+      allow read, write: if isAdmin() || (request.auth != null && resource.data.user_id == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+    }
+    
+    // Tags collection
+    match /tags/{tagId} {
+      allow read, write: if isAdmin() || (request.auth != null && resource.data.user_id == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+    }
+  }
+}
