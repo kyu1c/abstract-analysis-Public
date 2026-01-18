@@ -54,6 +54,34 @@ Google의 최신 Gemini AI 모델을 활용하여 초록을 분석하고, 드래
 
 ---
 
+## 👥 사용자 권한 및 관리자 설정 (User Roles & Admin Setup)
+이 프로젝트는 **일반 사용자(User)**와 **관리자(Admin)** 두 가지 역할을 지원합니다.
+
+### 1. 일반 사용자 (User)
+- `/signup` 페이지를 통해 회원가입한 모든 계정은 기본적으로 `User` 권한을 가집니다.
+- 본인의 데이터를 생성, 조회, 수정, 삭제할 수 있습니다.
+
+### 2. 관리자 (Admin)
+관리자는 전체 사용자 통계와 데이터를 조회할 수 있는 **Admin Dashboard**에 접근할 수 있습니다.
+현재 코드에는 관리자 이메일이 하드코딩되어 있으므로, 본인의 이메일로 변경해야 합니다.
+
+**관리자 권한 설정 방법:**
+1. `firestore.rules` 파일을 열고 아래 부분을 본인의 관리자 이메일로 변경합니다.
+   ```javascript
+   function isAdmin() {
+     return request.auth != null && request.auth.token.email == 'YOUR_ADMIN_EMAIL@example.com';
+   }
+   ```
+2. `app/page.tsx` (또는 관련 컴포넌트)에서 관리자 버튼 표시 조건을 찾아 변경합니다.
+   ```tsx
+   {user.email === "YOUR_ADMIN_EMAIL@example.com" && (
+     <Button ... >Admin Dashboard</Button>
+   )}
+   ```
+3. 변경 후 Firebase Console에서 Firestore 규칙을 다시 게시하고, 애플리케이션을 재실행합니다.
+
+---
+
 ## 🚀 설치 및 실행 방법 (Installation)
 
 ### 1. 프로젝트 설정 (Configuration)
